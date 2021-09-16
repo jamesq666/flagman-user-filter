@@ -2,34 +2,16 @@
 
 namespace app\controllers;
 
-use app\models\UserFilterSearch;
 use Yii;
 use app\models\Filter;
 use app\models\FilterSearch;
+use app\models\UserFilterSearch;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
 class FilterController extends Controller
 {
-    const FILTER_TYPE_USERNAME = 0;
-    const FILTER_TYPE_PHONE = 1;
-    const FILTER_TYPE_TOKEN = 2;
-    const FILTER_TYPE_EMAIL = 3;
-    const FILTER_TYPE_BIRTHDAY = 4;
-
-    public static function getFilterTypeName () {
-        $filter_type_name = [
-            self::FILTER_TYPE_USERNAME => 'Имя пользователя',
-            self::FILTER_TYPE_PHONE => 'Телефон',
-            self::FILTER_TYPE_TOKEN => 'Токен',
-            self::FILTER_TYPE_EMAIL => 'E-mail',
-            self::FILTER_TYPE_BIRTHDAY => 'Дата рождения',
-        ];
-
-        return $filter_type_name;
-    }
-
     public function behaviors()
     {
         return [
@@ -65,7 +47,7 @@ class FilterController extends Controller
     public function actionCreate()
     {
         $model = new Filter();
-        $types = $this -> getFilterTypeName();
+        $types = Filter::$filter_type_name;
 
         if ($model -> load(Yii::$app -> request -> post()) && $model -> save() ) {
             return $this -> redirect(['view', 'id' => $model -> id]);
@@ -80,7 +62,7 @@ class FilterController extends Controller
     public function actionUpdate($id)
     {
         $model = $this -> findModel($id);
-        $types = $this -> getFilterTypeName();
+        $types = Filter::$filter_type_name;
 
         if ($model -> load(Yii::$app -> request -> post()) && $model -> save() ) {
             return $this -> redirect(['view', 'id' => $model -> id]);
@@ -101,16 +83,14 @@ class FilterController extends Controller
 
     public function actionView($id)
     {
-        $type = $this -> findModel($id) -> type;
-        $value = $this -> findModel($id) -> value;
+        $model = $this -> findModel($id);
 
         $searchModel = new UserFilterSearch();
-        $dataProvider = $searchModel -> search('user', $type, $value);
+        $dataProvider = $searchModel -> search('user', $model -> type, $model -> value);
 
         return $this -> render('view', [
-            'model' => $this -> findModel($id),
+            'model' => $model,
             'dataProvider' => $dataProvider,
-            'type' => $type,
         ]);
     }
 }

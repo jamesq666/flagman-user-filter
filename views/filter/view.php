@@ -47,7 +47,7 @@ $this -> params['breadcrumbs'][] = 'Просмотр';
             'birthday',
             'reg_date',
             'last_visit',
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]);
     ?>

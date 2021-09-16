@@ -13,6 +13,20 @@ use yii\db\ActiveRecord;
 
 class Filter extends ActiveRecord
 {
+    const FILTER_TYPE_USERNAME = 0;
+    const FILTER_TYPE_PHONE = 1;
+    const FILTER_TYPE_TOKEN = 2;
+    const FILTER_TYPE_EMAIL = 3;
+    const FILTER_TYPE_BIRTHDAY = 4;
+
+    public static $filter_type_name = [
+      self::FILTER_TYPE_USERNAME => 'Имя пользователя',
+      self::FILTER_TYPE_PHONE => 'Телефон',
+      self::FILTER_TYPE_TOKEN => 'Токен',
+      self::FILTER_TYPE_EMAIL => 'E-mail',
+      self::FILTER_TYPE_BIRTHDAY => 'Дата рождения',
+    ];
+
     //Функция переопределяет имя таблицы, чтобы всегда использовалась таблица Filter
     public static function tableName() {
         return 'filter';
